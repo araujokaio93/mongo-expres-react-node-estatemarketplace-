@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function Profile() {
   return (
-    <div>Perfil:</div>
+    <div>Perfil</div>
   )
 }

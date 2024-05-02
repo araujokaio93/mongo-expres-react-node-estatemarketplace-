@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function Logout() {
   return (
-    <div>Deslogar.</div>
+    <div>Deslogar</div>
   )
 }
