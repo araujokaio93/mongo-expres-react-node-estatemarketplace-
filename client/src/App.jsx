@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import MainPage from "./pages/MainPage";
-import Login from "./pages/Login";
-import Logout from "./pages/Logout";
-import About from "./pages/About";
-import Profile from "./pages/Profile";
-import Header from "./components/Header";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import MainPage from './pages/MainPage';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import About from './pages/About';
+import Profile from './pages/Profile';
+import Header from './components/Header';
 
 export default function App() {
   return (
@@ -12,8 +12,8 @@ export default function App() {
       <Header />
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Logout" element={<Logout />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/About" element={<About />} />
         <Route path="/Profile" element={<Profile />} />
       </Routes>
