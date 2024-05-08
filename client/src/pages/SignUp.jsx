@@ -5,6 +5,7 @@ export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,21 +26,29 @@ export default function SignUp() {
         },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      console.log(data);
-      if (data.success === false) {
-        setLoading(false);
-        setError(data.message);
-        return;
-      }
+  
       setLoading(false);
-      setError(null);
-      navigate('/sign-in');
+  
+      // Verifique se a resposta está ok antes de tentar analisá-la como JSON
+      if (res.ok) {
+        const data = await res.json();
+        setSuccessMessage(data.message);
+        setError(null);
+  
+        // Redirecionar após um breve intervalo para permitir que a mensagem de sucesso seja exibida
+        setTimeout(() => {
+          navigate('/signin');
+        }, 2000); // Redirecionar após 2 segundos
+      } else {
+        // Se a resposta não estiver ok, verifique o status code e lance um erro específico
+        throw new Error('Não foi possível proceder a solitação de registro!');
+      }
     } catch (error) {
       setLoading(false);
       setError(error.message);
     }
   };
+  
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
@@ -71,12 +80,16 @@ export default function SignUp() {
           )}
         </button>
       </form>
-      <div className="flex gap-2 mt-5">
-        <p>Já possui uma conta?</p>
-        <Link to={"/signin"}>
-          <span className='text-blue-700'>Logar</span>
-        </Link>
-      </div>
+      {successMessage ? (
+        <p className='text-green-500 mt-5'>{successMessage}</p>
+      ) : (
+        <div className="flex gap-2 mt-5">
+          <p>Já possui uma conta?</p>
+          <Link to={"/signin"}>
+            <span className='text-blue-700'>Logar</span>
+          </Link>
+        </div>
+      )}
       {error && <p className='text-red-500 mt-5'>{error}</p>}
     </div>
   );
