@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import OAuth from '../components/OAuth';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -38,7 +39,7 @@ export default function SignUp() {
         // Redirecionar após um breve intervalo para permitir que a mensagem de sucesso seja exibida
         setTimeout(() => {
           navigate('/signin');
-        }, 2000); // Redirecionar após 2 segundos
+        }, 1200); // Redirecionar
       } else {
         // Se a resposta não estiver ok, verifique o status code e lance um erro específico
         throw new Error('Não foi possível proceder a solitação de registro!');
@@ -57,7 +58,7 @@ export default function SignUp() {
         <input type="text" placeholder='Nome de Usuário' className='border p-3 rounded-lg' id='username' onChange={handleChange} />
         <input type="text" placeholder='Email' className='border p-3 rounded-lg' id='email' onChange={handleChange} />
         <input type="password" placeholder='Senha' className='border p-3 rounded-lg' id='password' onChange={handleChange}  />
-        <button disabled={loading} className='bg-red-800 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 flex items-center justify-center'>
+        <button disabled={loading} className={`bg-red-800 shadow-md text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 flex items-center justify-center ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
           {loading ? (
             <>
               <svg
@@ -79,6 +80,7 @@ export default function SignUp() {
             'Registrar-se'
           )}
         </button>
+        <OAuth />
       </form>
       {successMessage ? (
         <p className='text-green-500 mt-5'>{successMessage}</p>
