@@ -48,7 +48,7 @@ export default function SignIn() {
       setSuccessMessage('O processo de Login foi um sucesso ');
       setTimeout(() => {
         navigate('/');
-      }, 1200); // Redirecionamento após 1500ms
+      }, 1200); // Redirecionamento após 1200ms
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
