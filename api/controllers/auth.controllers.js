@@ -9,7 +9,7 @@ export const signup = async (req, res, next) => {
   const newUser = new User({ username, email, password: hashedPassword });
   try {
     await newUser.save();
-    res.status(201).json('Usuário criado com Sucesso');
+    res.status(201).json('Usuário criado com sucesso!');
   } catch (error) {
     next(error);
   }
@@ -21,7 +21,7 @@ export const signin = async (req, res, next) => {
     const validUser = await User.findOne({ email });
     if (!validUser) return next(errorHandler(404, 'Usuário não cadastrado!'));
     const validPassword = bcryptjs.compareSync(password, validUser.password);
-    if (!validPassword) return next(errorHandler(401, 'Senha errada!'));
+    if (!validPassword) return next(errorHandler(401, 'Senha Inválida!'));
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
     res
@@ -64,6 +64,17 @@ export const google = async (req, res, next) => {
         .status(200)
         .json(rest);
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const signOut = async (req, res, next) => {
+  try {
+    setTimeout(() => {
+      res.clearCookie('access_token');
+      res.status(200).json('O Usuário foi deslogado!');
+    }, 1200); // Atraso de 1200 milissegundos (1,2 segundos)
   } catch (error) {
     next(error);
   }
