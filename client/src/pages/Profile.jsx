@@ -17,6 +17,7 @@ import {
   signOutUserStart,
 } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 
 export default function Profile() {
@@ -27,8 +28,8 @@ export default function Profile() {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
- 
-
+  const [showListingsError, setShowListingsError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
 
   // firebase storage
@@ -127,6 +128,42 @@ export default function Profile() {
     }
   };
 
+
+  const handleShowListings = async () => {
+    try {
+      setShowListingsError(false);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        setShowListingsError(true);
+        return;
+      }
+
+      setUserListings(data);
+    } catch (error) {
+      setShowListingsError(true);
+    }
+  };
+
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Perfil</h1>
@@ -155,18 +192,54 @@ export default function Profile() {
             ''
           )}
         </p>
-        <input type='text' placeholder='Nome de Usuário' id='username' defaultValue={currentUser.username} className='border p-3 rounded-lg' onChange={handleChange}/>
-        <input type='text' placeholder='Email' id='email' defaultValue={currentUser.email} className='border p-3 rounded-lg' onChange={handleChange}/>
-        <input type='password' placeholder='Senha' id='password' className='border p-3 rounded-lg' onChange={handleChange}/>  
+        <input
+          type='text'
+          placeholder='Nome de Usuário'
+          id='username'
+          defaultValue={currentUser.username}
+          className='border p-3 rounded-lg'
+          onChange={handleChange}
+        />
+        <input
+          type='text'
+          placeholder='Email'
+          id='email'
+          defaultValue={currentUser.email}
+          className='border p-3 rounded-lg'
+          onChange={handleChange}
+        />
+        <input
+          type='password'
+          placeholder='Senha'
+          id='password'
+          className='border p-3 rounded-lg'
+          onChange={handleChange}
+        />
         <button
           disabled={loading}
           className={`bg-red-800 shadow-md text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 flex items-center justify-center ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
         >
           {loading ? (
             <>
-              <svg xmlns='http://www.w3.org/2000/svg' className='animate-spin h-5 w-5 mr-3 text-white' fill='none' viewBox='0 0 24 24'>
-                <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'></circle>
-                <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 4.418 3.582 8 8 8v-4c-2.568 0-4.846-1.164-6.396-3.009l2.396-2.396zm16-2.582A7.962 7.962 0 0120 12h4c0-6.627-5.373-12-12-12v4c2.568 0 4.846 1.164 6.396 3.009l-2.396 2.396z'></path>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='animate-spin h-5 w-5 mr-3 text-white'
+                fill='none'
+                viewBox='0 0 24 24'
+              >
+                <circle
+                  className='opacity-25'
+                  cx='12'
+                  cy='12'
+                  r='10'
+                  stroke='currentColor'
+                  strokeWidth='4'
+                ></circle>
+                <path
+                  className='opacity-75'
+                  fill='currentColor'
+                  d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 4.418 3.582 8 8 8v-4c-2.568 0-4.846-1.164-6.396-3.009l2.396-2.396zm16-2.582A7.962 7.962 0 0120 12h4c0-6.627-5.373-12-12-12v4c2.568 0 4.846 1.164 6.396 3.009l-2.396 2.396z'
+                ></path>
               </svg>
               <span className='text-sm'>Carregando, espere um pouco ...</span>
             </>
@@ -174,13 +247,38 @@ export default function Profile() {
             'Atualizar'
           )}
         </button>
-      </form>
-      <div className='flex justify-between mt-5'>
-        <span onClick={handleDeleteUser} className='text-red-800 cursor-pointer'>Deletar conta</span>
-        <span onClick={handleSignOut} className='text-blue-800 cursor-pointer'>Deslogar</span>
-      </div>
-      <p className='text-red-500'>{error ? error : ''}</p>
-      <p className='text-green-500'>{updateSuccess ? 'Informações de Usuário atualizadas com sucesso': ''}</p>
+        </form>
+        <div className='flex items-center justify-center gap-55 mt-3'>
+          <span onClick={handleDeleteUser} className='text-red-800 cursor-pointer flex-grow text-center'>Deletar conta</span>
+          <button onClick={handleShowListings} className='text-green-700 mx-4'>
+            Mostrar anúncios
+          </button>
+          <span onClick={handleSignOut} className='text-blue-800 cursor-pointer flex-grow text-center'>Deslogar</span>
+        </div>
+        <p className='text-red-500 mb-2'>{error ? error : ''}</p>
+        <p className='text-green-500 mb-2'>{updateSuccess ? 'Informações de Usuário atualizadas com sucesso': ''}</p>
+        <p className='text-red-500 mb-2'>{showListingsError ? 'Erro ao mostrar os anúncios' : ''}</p>
+        {userListings && userListings.length > 0 && (
+        <div className='mt-7'>
+          <h1 className='text-2xl font-semibold text-center mb-4'>Seus Anúncios</h1>
+          {userListings.map((listing) => (
+            <div key={listing._id} className='border rounded-lg p-3 flex justify-between items-center gap-4'>
+              <Link to={`/listing/${listing._id}`}>
+                <img src={listing.imageUrls[0]} alt='listing cover' className='h-16 w-16 object-contain' />
+              </Link>
+              <Link className='text-slate-900 font-semibold hover:underline truncate flex-1' to={`/listing/${listing._id}`}>
+                <p>{listing.name}</p>
+              </Link>
+              <div className='flex flex-col items-center'>
+                <button onClick={()=>handleListingDelete(listing._id)} className='text-red-600 uppercase'>Deletar Anúncio</button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className='text-green-600 uppercase'>Editar Anúncio</button>
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
