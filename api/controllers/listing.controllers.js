@@ -12,19 +12,19 @@ export const createListing = async (req, res, next) => {
 
 export const deleteListing = async (req, res, next) => {
   const listing = await Listing.findById(req.params.id);
-  
+
   if (!listing) {
-    return next(errorHandler(404,'Nenhum anúncio foi encontrado'));
-  }
-  
-  if (req.user.id !== listing.userRef) {
-    return next(errorHandler(401,'Você pode apenas deletar suas próprias listas'));
+    return next(errorHandler(404, 'Nenhum anúncio foi encontrado!'));
   }
 
-  try{
+  if (req.user.id !== listing.userRef) {
+    return next(errorHandler(401, 'Você pode apenas deletar os anúncios de sua conta!'));
+  }
+
+  try {
     await Listing.findByIdAndDelete(req.params.id);
-    res.status(200).json('A lista foi deletada')
-  }catch(error){
+    res.status(200).json('O anúncio foi deletado com sucesso !');
+  } catch (error) {
     next(error);
   }
 };
@@ -35,7 +35,7 @@ export const updateListing = async (req, res, next) => {
     return next(errorHandler(404, 'Nenhum anúncio foi encontrado!'));
   }
   if (req.user.id !== listing.userRef) {
-    return next(errorHandler(401, 'Você pode apenas editar seus próprios anúncios'));
+    return next(errorHandler(401, 'Você pode apenas editar os anúncios de sua própria conta!'));
   }
 
   try {
@@ -45,6 +45,18 @@ export const updateListing = async (req, res, next) => {
       { new: true }
     );
     res.status(200).json(updatedListing);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getListing = async (req, res, next) => {
+  try {
+    const listing = await Listing.findById(req.params.id);
+    if (!listing) {
+      return next(errorHandler(404, 'Nenhum anúncio foi encontrado!'));
+    }
+    res.status(200).json(listing);
   } catch (error) {
     next(error);
   }

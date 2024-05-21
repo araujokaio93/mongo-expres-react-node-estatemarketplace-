@@ -82,17 +82,15 @@ export default function SignUp() {
         </button>
         <OAuth />
       </form>
-      {successMessage ? (
-        <p className='text-green-500 mt-5'>{successMessage}</p>
-      ) : (
-        <div className="flex gap-2 mt-5">
-          <p>Já possui uma conta?</p>
-          <Link to={"/signin"}>
-            <span className='text-blue-700'>Logar</span>
-          </Link>
-        </div>
-      )}
+      <div className="flex justify-center items-center mt-5">
+        <p>Já possui uma conta?</p>
+        <Link to={"/signin"} className="text-blue-700 ml-2">
+          Logar
+        </Link>
+      </div>
+      {successMessage && <p className='text-green-500 mt-5'>{successMessage}</p>}
       {error && <p className='text-red-500 mt-5'>{error}</p>}
     </div>
   );
+  
 }

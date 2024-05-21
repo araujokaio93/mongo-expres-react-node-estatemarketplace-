@@ -179,7 +179,7 @@ export default function Profile() {
           onClick={() => fileRef.current.click()}
           src={formData.avatar || currentUser.avatar}
           alt='Profile'
-          className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2'
+          className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2 border-4 border-red-800'
         />
         <p className='text-sm self-center'>
           {fileUploadError ? (
@@ -247,18 +247,18 @@ export default function Profile() {
             'Atualizar'
           )}
         </button>
-        </form>
-        <div className='flex items-center justify-center gap-55 mt-3'>
-          <span onClick={handleDeleteUser} className='text-red-800 cursor-pointer flex-grow text-center'>Deletar conta</span>
-          <button onClick={handleShowListings} className='text-green-700 mx-4'>
-            Mostrar anúncios
-          </button>
-          <span onClick={handleSignOut} className='text-blue-800 cursor-pointer flex-grow text-center'>Deslogar</span>
-        </div>
-        <p className='text-red-500 mb-2'>{error ? error : ''}</p>
-        <p className='text-green-500 mb-2'>{updateSuccess ? 'Informações de Usuário atualizadas com sucesso': ''}</p>
-        <p className='text-red-500 mb-2'>{showListingsError ? 'Erro ao mostrar os anúncios' : ''}</p>
-        {userListings && userListings.length > 0 && (
+      </form>
+      <div className='flex items-center justify-center gap-5 mt-5'>
+        <span onClick={handleDeleteUser} className='text-red-800 cursor-pointer flex-grow text-center'>Deletar conta</span>
+        <button onClick={handleShowListings} className='text-green-700 mx-4'>
+          Mostrar anúncios
+        </button>
+        <span onClick={handleSignOut} className='text-blue-800 cursor-pointer flex-grow text-center'>Deslogar</span>
+      </div>
+      {error && <p className='text-red-500 mt-3 mb-2'>{error}</p>}
+      {updateSuccess && <p className='text-green-500 mt-3 mb-2'>Informações de Usuário atualizadas com sucesso</p>}
+      {showListingsError && <p className='text-red-500 mt-3 mb-2'>Erro ao mostrar os anúncios</p>}
+      {userListings && userListings.length > 0 && (
         <div className='mt-7'>
           <h1 className='text-2xl font-semibold text-center mb-4'>Seus Anúncios</h1>
           {userListings.map((listing) => (
@@ -270,7 +270,7 @@ export default function Profile() {
                 <p>{listing.name}</p>
               </Link>
               <div className='flex flex-col items-center'>
-                <button onClick={()=>handleListingDelete(listing._id)} className='text-red-600 uppercase'>Deletar Anúncio</button>
+                <button onClick={() => handleListingDelete(listing._id)} className='text-red-600 uppercase'>Deletar Anúncio</button>
                 <Link to={`/update-listing/${listing._id}`}>
                   <button className='text-green-600 uppercase'>Editar Anúncio</button>
                 </Link>
@@ -281,4 +281,4 @@ export default function Profile() {
       )}
     </div>
   );
-}
+}  
