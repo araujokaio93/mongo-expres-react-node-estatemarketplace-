@@ -173,7 +173,7 @@ export default function CreateListing() {
   return (
     <main className='p-3 max-w-4xl mx-auto'>
         <h1 className='text-3xl font-semibold text-center my-7'>
-            Criação de Anúncio
+             Edição de Anúncio
         </h1>
         <form onSubmit={handleSubmit} className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
             <div className='flex flex-col gap-4 flex-1'>
@@ -316,7 +316,7 @@ export default function CreateListing() {
                                 value={formData.discountPrice}
                             />
                             <div className='flex flex-col items-center'>
-                                <p>Preço com Desconto</p>
+                                <p>Desconto</p>
                                 {formData.type === 'rent' && (
                                     <span className='text-xs'>($ / month)</span>
                                 )}
