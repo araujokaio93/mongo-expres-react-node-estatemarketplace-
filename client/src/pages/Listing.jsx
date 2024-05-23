@@ -66,7 +66,7 @@ export default function Listing() {
                 {listing.imageUrls.map((url) => (
                   <SwiperSlide key={url}>
                     <div
-                      className='h-[550px]'
+                      className='h-[500px] border-4 rounded-lg border-red-800 m-6 '
                       style={{
                         background: `url(${url}) center no-repeat`,
                         backgroundSize: 'cover',
@@ -107,14 +107,14 @@ export default function Listing() {
                   {listing.address}
                 </p>
                 <div className='flex gap-4'>
-                  <p className='bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
-                    {listing.type === 'rent' ? 'Para á alugar' : 'Para á venda'}
+                <p className='bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md flex justify-center items-center'>
+                  {listing.type === 'rent' ? 'Para á alugar' : 'Para á venda'}
+                </p>
+                {listing.offer && (
+                  <p className='bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md flex justify-center items-center'>
+                    R$ {+listing.regularPrice - +listing.discountPrice} - com o Desconto
                   </p>
-                  {listing.offer && (
-                    <p className='bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
-                      R$ {+listing.regularPrice - +listing.discountPrice} - com o Desconto
-                    </p>
-                  )}
+                )}
                 </div>
                 <p className='text-slate-800'>
                   <span className='font-semibold text-black'>Descrição do Anunciante - </span>

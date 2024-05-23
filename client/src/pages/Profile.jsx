@@ -248,7 +248,7 @@ export default function Profile() {
           )}
         </button>
       </form>
-      <div className='flex items-center justify-center gap-5 mt-5'>
+      <div className='flex items-center justify-center gap-5 mt-5 '>
         <span onClick={handleDeleteUser} className='text-red-800 cursor-pointer flex-grow text-center'>Deletar conta</span>
         <button onClick={handleShowListings} className='text-green-700 mx-4'>
           Mostrar anúncios
@@ -262,17 +262,26 @@ export default function Profile() {
         <div className='mt-7'>
           <h1 className='text-2xl font-semibold text-center mb-4'>Seus Anúncios</h1>
           {userListings.map((listing) => (
-            <div key={listing._id} className='border rounded-lg p-3 flex justify-between items-center gap-4'>
+            <div key={listing._id} className='border-2 border-red-800 rounded-lg p-4 flex justify-between items-center gap-4'>
               <Link to={`/listing/${listing._id}`}>
                 <img src={listing.imageUrls[0]} alt='listing cover' className='h-16 w-16 object-contain' />
               </Link>
               <Link className='text-slate-900 font-semibold hover:underline truncate flex-1' to={`/listing/${listing._id}`}>
                 <p>{listing.name}</p>
               </Link>
-              <div className='flex flex-col items-center'>
-                <button onClick={() => handleListingDelete(listing._id)} className='text-red-600 uppercase'>Deletar Anúncio</button>
-                <Link to={`/update-listing/${listing._id}`}>
-                  <button className='text-green-600 uppercase'>Editar Anúncio</button>
+              <div className='flex w-full'>
+                <button
+                  onClick={() => handleListingDelete(listing._id)}
+                  className='flex-1 bg-red-800 text-white uppercase p-1 rounded-lg mt-2 gap-2 m-2 hover:opacity-95'
+                >
+                  Deletar Anúncio
+                </button>
+                <Link to={`/update-listing/${listing._id}`} className='flex-1'>
+                  <button
+                    className='w-full bg-green-800 text-white uppercase p-1 rounded-lg mt-2 m-2 hover:opacity-95'
+                  >
+                    Editar Anúncio
+                  </button>
                 </Link>
               </div>
             </div>

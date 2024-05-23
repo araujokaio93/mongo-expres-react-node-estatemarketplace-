@@ -325,14 +325,14 @@ export default function CreateListing() {
                     )}
                 </div>
             </div>
-            <div className='flex flex-col flex-1 gap-4'>
+            <div className='flex flex-col flex-1 gap-4 '>
                 <p className='font-semibold'>
                     Images:
                     <span className='font-normal text-gray-600 ml-2'>
                         A primeira imagem no upload é a que será mostrada como capa (máximo de 6 imagens por upload.)
                     </span>
                 </p>
-                <div className='flex gap-4'>
+                <div className='flex gap-4 '>
                     <input
                         onChange={(e) => setFiles(e.target.files)}
                         className='p-3 border border-gray-300 rounded w-full'

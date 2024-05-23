@@ -23,9 +23,9 @@ export default function Header() {
       setSearchTerm(searchTermFromUrl);
     }
   }, [location.search]);
-  
+
   return (
-    <header className='bg-red-800 shadow-md'>
+    <header className='bg-red-800 shadow-md rounded-lg'>
     <div className='flex justify-between items-center max-w-6x1 mx-auto p-3'>
       <Link to="/">
         <h1 className='font-bold text-lg sm:text-xl flex flex-wrap'>
