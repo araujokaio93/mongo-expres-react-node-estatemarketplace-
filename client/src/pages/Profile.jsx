@@ -17,8 +17,7 @@ import {
   signOutUserStart,
 } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -31,12 +30,7 @@ export default function Profile() {
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
-
-  // firebase storage
-  // allow read;
-  // allow write: if
-  // request.resource.size < 2 * 1024 * 1024 &&
-  // request.resource.contentType.matches('image/.*')
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (file) {
@@ -124,10 +118,9 @@ export default function Profile() {
       }
       dispatch(deleteUserSuccess(data));
     } catch (error) {
-      dispatch(deleteUserFailure(data.message));
+      dispatch(deleteUserFailure(error.message));
     }
   };
-
 
   const handleShowListings = async () => {
     try {
@@ -253,6 +246,11 @@ export default function Profile() {
         <button onClick={handleShowListings} className='text-green-700 mx-4'>
           Mostrar anúncios
         </button>
+        <Link to="/create-listing">
+          <button className='text-orange-800 mx-4'>
+            Criar anúncio
+          </button>
+        </Link>
         <span onClick={handleSignOut} className='text-blue-800 cursor-pointer flex-grow text-center'>Deslogar</span>
       </div>
       {error && <p className='text-red-500 mt-3 mb-2'>{error}</p>}
@@ -290,4 +288,4 @@ export default function Profile() {
       )}
     </div>
   );
-}  
+}
